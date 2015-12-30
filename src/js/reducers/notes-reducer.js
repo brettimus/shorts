@@ -1,30 +1,85 @@
 const {getNotes, saveNotes} = require("../db/index");
 
 const initialState = {
-  input: "",
+  newNoteInput: "",
   notes: getNotes(),
 };
 
 const notesReducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'ADD_NOTE'        : return addNote(state, action);
-    case 'EDIT_NOTE_INPUT' : return editNoteInput(state, action);
-    default                : return state;
+    case 'ADD_NOTE'                 : return addNote(state, action);
+    case 'UPDATE_NOTE'              : return updateNote(state, action);
+    case 'TOGGLE_NOTE_EDIT'         : return toggleNoteEdit(state, action);
+    case 'EDIT_EXISTING_NOTE_INPUT' : return editExistingNoteInput(state, action);
+    case 'EDIT_NEW_NOTE_INPUT'      : return editNewNoteInput(state, action);
+    default                         : return state;
   }
 };
 
 module.exports = notesReducer;
 
 function addNote(state, action) {
-  let oldNotes = state.notes;
-  let newNote = state.input;
-  let notes = [...oldNotes, newNote];
-  let input = ""; // clear input
+  let body = state.newNoteInput;
+  let newNote = createNote({ body });
+  let notes = [...state.notes, newNote];
   saveNotes(notes);
-  return  {...state, notes, input};
+  let newNoteInput = "";
+  return  {...state, notes, newNoteInput};
 }
 
-function editNoteInput(state, action) {
-  let input = action.value;
-  return  {...state, input};
+function updateNote(state, action) {
+  let {id} = action;
+  let oldNotes = state.notes;
+  let oldNote = oldNotes[id];
+  let newNoteBody = oldNote.editValue;
+  let newNote = createNote({ body: newNoteBody });
+  let notes = [
+    ...oldNotes.slice(0, id),
+    newNote,
+    ...oldNotes.slice(id+1)
+  ];
+  saveNotes(notes);
+  return { ...state, notes };
+}
+
+function toggleNoteEdit(state, action) {
+  let { id } = action;
+  let oldNotes = state.notes;
+  let oldNote = oldNotes[id];
+  let isEditing = !oldNote.isEditing;
+  let newNote = { ...oldNote, isEditing };
+  let notes = [
+    ...oldNotes.slice(0, id),
+    newNote,
+    ...oldNotes.slice(id+1)
+  ];
+  return { ...state, notes };
+}
+
+function editExistingNoteInput(state, action) {
+  let {id, value} = action;
+  let oldNotes = state.notes;
+  let oldNote = oldNotes[id];
+  let newNote = { ...oldNote, editValue: value };
+  let notes = [
+    ...oldNotes.slice(0, id),
+    newNote,
+    ...oldNotes.slice(id+1)
+  ];
+  return { ...state, notes };
+}
+
+function editNewNoteInput(state, action) {
+  let newNoteInput = action.value;
+  return  { ...state, newNoteInput };
+}
+
+// TODO - move elsewhere
+
+function createNote({ body = "", isEditing = false }) {
+  return {
+    body,
+    isEditing,
+    editValue: body,
+  };
 }

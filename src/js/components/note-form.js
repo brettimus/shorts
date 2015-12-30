@@ -36,7 +36,7 @@ const NoteForm = React.createClass({
         let {value} = event.target;
 
         store.dispatch({
-            type: "EDIT_NOTE_INPUT",
+            type: "EDIT_NEW_NOTE_INPUT",
             value,
         });
     },
