@@ -1,6 +1,6 @@
 const React = require("react");
 
-const NoteInput = React.createClass({
+const NoteInput = () => ({
     componentDidMount() {
         let input = this.refs.noteInput;
         this.focus(input);
@@ -14,16 +14,42 @@ const NoteInput = React.createClass({
 
     render() {
         return (
-            <input 
-              ref="noteInput"
-              onBlur={ this.props.handleBlur }
-              onChange={ this.props.handleChange } 
-              value={ this.props.value } />
+            <form ref="noteForm" onSubmit={ this.props.handleSubmit }>
+                <input className="input input-update"
+                  ref="noteInput"
+                  onChange={ this.props.handleChange } 
+                  value={ this.props.value } />
+            </form>
         );
     }
 });
 
+const NoteUpdateButton = () => ({
+    handleClick(event) {
+        event.stopPropagation;
+        event.preventDefault;
+
+        this.props.updateNote();
+    },
+
+    render() {
+        return (
+            <span onClick={(e) => this.handleClick(e) } >
+                ok
+            </span>
+        );
+    },
+});
+
 const Note = () => ({
+
+    deleteNote() {
+        let { id } = this.props;
+        this.props.store.dispatch({
+            type: "DELETE_NOTE",
+            id,
+        }); 
+    },
 
     handleChange(event) {
         let { id } = this.props;
@@ -33,6 +59,13 @@ const Note = () => ({
             id,
             value,
         });
+    },
+
+    handleSubmit(event) {
+        event.stopPropagation();
+        event.preventDefault();
+
+        this.updateNote();
     },
 
     toggleEdit() {
@@ -56,26 +89,27 @@ const Note = () => ({
 
         if (isEditing) {
             return (
-                <li>
+                <li className="note">
+                    <NoteInput value={editValue}
+                      handleSubmit= { (e) => this.handleSubmit(e) }
+                      handleChange={ (e) => this.handleChange(e) } />
 
-                    <NoteInput handleBlur={ () => this.toggleEdit() }
-                      handleChange={ (event) => this.handleChange(event) } 
-                      value={editValue} />
-
-                    <span onClick={ () => this.updateNote() } >
-                        Update
-                    </span>
-
-                    &nbsp; | &nbsp;
-
-                    <span onClick={ () => this.toggleEdit() } >
-                        X
-                    </span>
+                    <div style={{ textAlign: "right", }}>
+                        <NoteUpdateButton updateNote={ () => this.updateNote() } />
+                        &nbsp; | &nbsp;
+                        <span onClick={ () => this.toggleEdit() }>
+                            nvm
+                        </span>
+                        &nbsp; | &nbsp;
+                        <span onClick={ () => this.deleteNote() }>
+                            del
+                        </span>
+                    </div>
                 </li>
             );
         }
         return (
-            <li onClick={ () => this.toggleEdit() }>
+            <li className="note" onClick={ () => this.toggleEdit() }>
                 {body}
             </li>
         );
@@ -85,14 +119,27 @@ const Note = () => ({
 const NoteList = () => ({
     getNotes() {
         let {notes} = this.props.store.getState();
+        if (notes.length === 0) return this.noNotesMessage();
         return notes.map((note, i) => <Note key={i} id={i} note={note} store={this.props.store} />)
+    },
+
+    noNotesMessage() {
+        return (
+            <p>
+                No notes? No problem!
+                <br />
+                Add a note below.
+            </p>
+        );
     },
 
     render() {
         return (
-            <ul>
-                {this.getNotes()}
-            </ul>
+            <div className="notes-container">
+                <ul className="notes-list">
+                    {this.getNotes()}
+                </ul>
+            </div>
         );
     },
 });

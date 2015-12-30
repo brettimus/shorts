@@ -3,7 +3,11 @@ const React = require("react");
 const NoteInput = () => ({
     render() {
         return (
-            <input onChange={this.props.handleChange} value={this.props.value} />
+            <input 
+                className="input input-add" 
+                onChange={this.props.handleChange} 
+                placeholder={"Type in me! I dare ya."}
+                value={this.props.value} />
         );
     },
 });
@@ -11,7 +15,7 @@ const NoteInput = () => ({
 const NoteButton = () => ({
     render() {
         return (
-            <button onClick={this.props.handleClick}>
+            <button className="button button-add" onClick={this.props.handleClick}>
                 {this.props.children}
             </button>
         );
@@ -23,9 +27,7 @@ const NoteForm = React.createClass({
         event.stopPropagation();
         event.preventDefault();
 
-        let {store} = this.props;
-
-        store.dispatch({ type: "ADD_NOTE", });
+        this.props.store.dispatch({ type: "ADD_NOTE", });
     },
 
     handleInputChange(event) {
@@ -34,22 +36,24 @@ const NoteForm = React.createClass({
 
         let {store} = this.props;
         let {value} = event.target;
-
         store.dispatch({
             type: "EDIT_NEW_NOTE_INPUT",
             value,
         });
     },
 
+    handleSubmit(event) {
+        this.props.store.dispatch({ type: "ADD_NOTE", });
+    },
+
     render() {
         let {store} = this.props;
         let state = store.getState();
         return (
-            <form>
-                This is a form
+            <form onSubmit={this.handleSubmit} className="note-form note-form-fixed">
                 <NoteInput 
                   handleChange={this.handleInputChange} 
-                  value={state.input} />
+                  value={state.newNoteInput} />
 
                 <NoteButton handleClick={this.handleButtonClick}>
                     Add

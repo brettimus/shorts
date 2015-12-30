@@ -9,6 +9,7 @@ const notesReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'ADD_NOTE'                 : return addNote(state, action);
     case 'UPDATE_NOTE'              : return updateNote(state, action);
+    case 'DELETE_NOTE'              : return deleteNote(state, action);
     case 'TOGGLE_NOTE_EDIT'         : return toggleNoteEdit(state, action);
     case 'EDIT_EXISTING_NOTE_INPUT' : return editExistingNoteInput(state, action);
     case 'EDIT_NEW_NOTE_INPUT'      : return editNewNoteInput(state, action);
@@ -28,14 +29,24 @@ function addNote(state, action) {
 }
 
 function updateNote(state, action) {
-  let {id} = action;
+  let { id } = action;
   let oldNotes = state.notes;
   let oldNote = oldNotes[id];
-  let newNoteBody = oldNote.editValue;
-  let newNote = createNote({ body: newNoteBody });
+  let newNote = createNote({ body: oldNote.editValue });
   let notes = [
     ...oldNotes.slice(0, id),
     newNote,
+    ...oldNotes.slice(id+1)
+  ];
+  saveNotes(notes);
+  return { ...state, notes };
+}
+
+function deleteNote(state, action) {
+  let { id } = action;
+  let oldNotes = state.notes;
+  let notes = [
+    ...oldNotes.slice(0, id),
     ...oldNotes.slice(id+1)
   ];
   saveNotes(notes);
