@@ -1,6 +1,8 @@
+const {getNotes, saveNotes} = require("../db/index");
+
 const initialState = {
   input: "",
-  notes: [],
+  notes: getNotes(),
 };
 
 const notesReducer = (state = initialState, action) => {
@@ -18,6 +20,7 @@ function addNote(state, action) {
   let newNote = state.input;
   let notes = [...oldNotes, newNote];
   let input = ""; // clear input
+  saveNotes(notes);
   return  {...state, notes, input};
 }
 
