@@ -35,6 +35,7 @@ body {
 
 .notes-container {
   border-top: solid 1px transparentize($black, .5);
+  min-height: 10em;
   padding-top: 1em;
 }
 
@@ -49,6 +50,7 @@ body {
   max-width: 30em;
   min-height: 3em;
   padding: .9em .5em;
+  position: relative;
 
   &:nth-of-type(even) {
     border-left: solid .25em transparentize($yellow, .6);
@@ -65,6 +67,21 @@ body {
   &:last-of-type {
     border-bottom-left-radius: .25em;
 
+  }
+}
+
+.note-body {
+
+}
+
+.note-buttons {
+  text-align: right; 
+
+  span {
+    color: $red;
+    cursor: pointer;
+    font-weight: $light;
+    font-size: .85em;
   }
 }
 

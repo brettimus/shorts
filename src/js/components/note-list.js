@@ -84,25 +84,36 @@ const Note = () => ({
         }); 
     },
 
+    handleDelete(event) {
+        event.stopPropagation();
+        event.preventDefault();
+
+        this.deleteNote();
+    },
+
+    handleToggleEdit(event) {
+        event.stopPropagation();
+        event.preventDefault();
+
+        this.toggleEdit();
+    },
+
     render() {
         let { isEditing, editValue, body } = this.props.note;
 
         if (isEditing) {
             return (
                 <li className="note">
-                    <NoteInput value={editValue}
-                      handleSubmit= { (e) => this.handleSubmit(e) }
-                      handleChange={ (e) => this.handleChange(e) } />
-
-                    <div style={{ textAlign: "right", }}>
+                    <div className="note-body">
+                        <NoteInput value={editValue}
+                          handleSubmit= { (e) => this.handleSubmit(e) }
+                          handleChange={ (e) => this.handleChange(e) } />
+                    </div>
+                    <div className="note-buttons">
                         <NoteUpdateButton updateNote={ () => this.updateNote() } />
                         &nbsp; | &nbsp;
-                        <span onClick={ () => this.toggleEdit() }>
+                        <span onClick={ (e) => this.handleToggleEdit(e) }>
                             nvm
-                        </span>
-                        &nbsp; | &nbsp;
-                        <span onClick={ () => this.deleteNote() }>
-                            del
                         </span>
                     </div>
                 </li>
@@ -110,7 +121,18 @@ const Note = () => ({
         }
         return (
             <li className="note" onClick={ () => this.toggleEdit() }>
-                {body}
+                <div className="note-body">
+                    {body}
+                </div>
+                <div className="note-buttons">
+                    <span onClick={ (e) => this.handleToggleEdit(e) }>
+                        edit
+                    </span>
+                    &nbsp; | &nbsp;
+                    <span onClick={ (e) => this.handleDelete(e) }>
+                        del
+                    </span>
+                </div>
             </li>
         );
     },
@@ -128,7 +150,7 @@ const NoteList = () => ({
             <p>
                 No notes? No problem!
                 <br />
-                Add a note below.
+                <small>Add a note below.</small>
             </p>
         );
     },
