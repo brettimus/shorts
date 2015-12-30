@@ -1,10 +1,9 @@
 const React = require("react");
 const ReactDOM = require("react-dom");
-const { createStore, combineReducers } = require("redux");
+const {createStore} = require("redux");
 
-const note = require("./reducers/note-reducer");
-const reducers = { note, };
-const store = createStore(combineReducers(reducers));
+const reducer = require("./reducers/notes-reducer");
+const store = createStore(reducer);
 
 const App = require("./components/app");
 const appMount = document.getElementById("tada");

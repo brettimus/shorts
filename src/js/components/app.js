@@ -1,23 +1,23 @@
 const React = require("react");
 
+const NoteList = require("./note-list");
+const NoteForm = require("./note-form");
+
 const App = () => ({
     render() {
-        let styles = {
-            color: "white",
-            fontWeight: 300,
-            lineHeight: 1.6,
-            position: "absolute", 
-            textAlign: "center",
-            top: "20%", 
-            width: "100%"
-        };
-
+        console.log("Current State:", this.props.store.getState());
         return (
-            <h1 style={styles}>
-                <b>Hello!</b> 
-                <br />
-                Welcome to notes.
-            </h1>
+            <div>
+                <h1>
+                    Keep track of yourself.
+                </h1>
+                <p>
+                    Shorts is a simple way to make short notes for yourself.
+                </p>
+                <hr/>
+                <NoteList store={this.props.store} />
+                <NoteForm store={this.props.store}/>
+            </div>
         );
     },
 });
