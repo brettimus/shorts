@@ -56,7 +56,7 @@ const NoteForm = React.createClass({
                   value={state.newNoteInput} />
 
                 <NoteButton handleClick={this.handleButtonClick}>
-                    Add
+                    🎉
                 </NoteButton>
             </form>
         );

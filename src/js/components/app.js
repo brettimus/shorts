@@ -3,14 +3,38 @@ const React = require("react");
 const NoteList = require("./note-list");
 const NoteForm = require("./note-form");
 
-const App = () => ({
-    render() {
-        console.log("Current State:", this.props.store.getState());
+const App = React.createClass({
 
+    componentDidMount() {
+        document.body.addEventListener("click", this.handleClick);
+    },
+
+    componentWillUnmout() {
+        document.body.removeEventListener("click", this.handleClick);
+    },
+
+    handleClick(event) {
+        this.props.store.dispatch({
+            type: "EXIT_NOTE_EDITING",
+        });
+    },
+
+    toRainbowChar(char, key) {
+        return (
+            <span key={key} className="rainbow-char">
+                {char}
+            </span>
+        );
+    },
+
+    render() {
         return (
             <div>
-                <p>
-                    <b>Shorts</b>
+                <p className="notes-lede">
+                    {"Shorts".split("").map(this.toRainbowChar)}
+                    <span className="notes-sub">
+                        A delightful way to leave yourself little notes.
+                    </span>
                 </p>
                 <NoteList store={this.props.store} />
                 <NoteForm store={this.props.store}/>

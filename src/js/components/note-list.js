@@ -34,9 +34,13 @@ const NoteUpdateButton = () => ({
 
     render() {
         return (
-            <span onClick={(e) => this.handleClick(e) } >
-                ok
-            </span>
+            <button className="button button-note-action"
+                onClick={(e) => this.handleClick(e) } >
+                <span className="emoji">👍</span>
+                <span className="button-note-action-text">
+                    Update
+                </span>
+            </button>
         );
     },
 });
@@ -111,10 +115,6 @@ const Note = () => ({
                     </div>
                     <div className="note-buttons">
                         <NoteUpdateButton updateNote={ () => this.updateNote() } />
-                        &nbsp; | &nbsp;
-                        <span onClick={ (e) => this.handleToggleEdit(e) }>
-                            nvm
-                        </span>
                     </div>
                 </li>
             );
@@ -125,13 +125,14 @@ const Note = () => ({
                     {body}
                 </div>
                 <div className="note-buttons">
-                    <span onClick={ (e) => this.handleToggleEdit(e) }>
-                        edit
-                    </span>
-                    &nbsp; | &nbsp;
-                    <span onClick={ (e) => this.handleDelete(e) }>
-                        del
-                    </span>
+                    <button className="button button-note-action"
+                        onClick={ (e) => this.handleDelete(e) }>
+                    
+                        <span className="emoji">🔥</span>
+                        <span className="button-note-action-text">
+                            Delete
+                        </span>
+                    </button>
                 </div>
             </li>
         );
@@ -147,10 +148,14 @@ const NoteList = () => ({
 
     noNotesMessage() {
         return (
-            <p>
-                No notes? No problem!
+            <p className="no-notes">
+                No shorts? No problem!
                 <br />
-                <small>Add a note below.</small>
+                <small>
+                    Write yourself a short note below and tap the 
+                    &nbsp;
+                    <span className="emoji">🎉</span>
+                </small>
             </p>
         );
     },

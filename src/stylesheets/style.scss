@@ -1,5 +1,6 @@
 $black  : #222;
 $white  : #fff;
+$off-white: #fafafa;
 $red    : #AE2B3D;
 $purple : #4208A1;
 $blue   : #115ABC;
@@ -14,7 +15,10 @@ $light  : 300;
 $normal : 400;
 $semi   : 600;
 
-$bottom-nav-height: 4rem;
+$even-note-color: transparentize($yellow, .75);
+$odd-note-color: transparentize($orange, .75);
+$rainbow-stripes: linear-gradient(to right, $red 0%, $red 16.66667%, $orange 16.66667%, $orange 33.33333%, $yellow 33.33333%, $yellow 50%, $green 50%, $green 66.66667%, $blue 66.66667%, $blue 83.33333%, $purple 83.33333%, $purple 100% );
+$rainbow-stripes-bottom: $rainbow-stripes 0 0 5 0;
 
 html,
 body {
@@ -22,26 +26,38 @@ body {
   font-family: $sans-serif;
 }
 
-body {
-  padding-bottom: $bottom-nav-height;
-}
-
 .app-container {
   box-sizing: border-box;
   margin: 0 auto;
-  max-width: 48em;
+  max-width: 28em;
   padding: 1em .5em 2em;
 }
 
+.notes-lede {
+  // border-bottom: solid 3px transparentize($black, .5);
+  border-image: $rainbow-stripes-bottom;
+  box-sizing: border-box;
+  margin: 0;
+  padding-bottom: .5em;
+  text-align: center;
+}
+
+.notes-sub {
+  display: block;
+  font-size: 75%;
+  font-weight: 300;
+  margin-top: .2em;
+}
+
 .notes-container {
-  border-top: solid 1px transparentize($black, .5);
-  min-height: 10em;
+  box-sizing: border-box;
+  // min-height: 10em;
   padding-top: 1em;
 }
 
 .notes-list {
   list-style-type: none;
-  padding: 0 .4em;
+  padding: 0;
   margin: 0;
 }
 
@@ -49,16 +65,7 @@ body {
   box-sizing: border-box;
   max-width: 30em;
   min-height: 3em;
-  padding: .9em .5em;
   position: relative;
-
-  &:nth-of-type(even) {
-    border-left: solid .25em transparentize($yellow, .6);
-  }
-
-  &:nth-of-type(odd) {
-    border-left: solid .25em transparentize($orange, .6);
-  }
 
   &:first-of-type {
     border-top-left-radius: .25em;
@@ -66,22 +73,46 @@ body {
 
   &:last-of-type {
     border-bottom-left-radius: .25em;
+  }
 
+  &:nth-of-type(even) {
+    background: $off-white;
+    border-left: solid .25em $even-note-color;
+
+    .button-note-action {
+      background: $white;
+      border: solid 1px $even-note-color;      
+    }
+  }
+
+  &:nth-of-type(odd) {
+    background: $white;
+    border-left: solid .25em $odd-note-color;
+
+    .button-note-action {
+      background: $white;
+      border: solid 1px $odd-note-color;      
+    }
   }
 }
 
 .note-body {
-
+  padding: .8em 3em 1em .5em;
+  min-height: 2.5em;
 }
 
 .note-buttons {
-  text-align: right; 
+  position: absolute;
+  right: .2em;
+  text-align: right;
+  top: 50%;
+  transform: translateY(-45%);
 
   span {
     color: $red;
     cursor: pointer;
     font-weight: $light;
-    font-size: .85em;
+    // font-size: .9em;
   }
 }
 
@@ -91,14 +122,8 @@ body {
 }
 
 .button {
-  background: $blue;
   border: 0;
-  border-bottom: solid 2px $blue;
-  border-top: solid 2px $blue;
-  border-bottom-right-radius: .25em;
-  border-top-right-radius: .25em;
   box-sizing: border-box;
-  color: $white;
   cursor: pointer;
   display: inline-block;
   margin: 0;
@@ -107,12 +132,61 @@ body {
   padding: 0;
 }
 
+.button-note-action {
+  border-radius: 50%;
+  height: 2.2em;
+  padding-left: 2px; // necessary to center those emoji!
+  text-align: center;
+  width: 2.2em;
+}
+
+.button-note-action-text {
+  display: block;
+  font-size: 55%;
+  font-weight: $light;
+  margin: 0;
+  padding: 0;
+}
+
+.button-add {
+  background: $blue;
+  border-bottom: solid 2px $blue;
+  border-top: solid 2px $blue;
+  border-bottom-right-radius: .25em;
+  border-top-right-radius: .25em;
+  color: $white;
+}
+
 .input {
   border: 0;
   box-sizing: border-box;
   display: inline-block;
   margin: 0;
   padding: 0 .5em;
+}
+
+.input-add {
+  border-left: solid 2px $blue;
+  border-bottom: solid 2px $blue;
+  border-top: solid 2px $blue;
+  min-height: 3em;
+  min-width: 3em;
+  padding: 0;
+  padding-left: .5em;
+  width: 75%;
+
+  &:focus {
+    outline: 0;
+    box-shadow: inset 0 -4px 4px transparentize(lighten($blue, 30%), .75),
+                inset 0 4px 4px transparentize(lighten($blue, 30%), .75),
+                inset 4px 0 4px transparentize(lighten($blue, 30%), .75),
+                inset -4px 0 4px transparentize(lighten($blue, 30%), .75);
+  }
+}
+
+.input-update {
+  background: transparent;
+  min-width: 0;
 
   &:focus {
     outline: 0;
@@ -123,19 +197,37 @@ body {
   }
 }
 
-.input-add {
-
-  border-left: solid 2px $blue;
-  border-bottom: solid 2px $blue;
-  border-top: solid 2px $blue;
-  min-height: 3em;
-  min-width: 3em;
-  padding: 0;
-  padding-left: .5em;
+.no-notes {
+  color: $black;
+  small {
+    color: lighten($black, 25%);
+    font-weight: $light;
+  }
 }
 
-.input-update {
-  min-width: 0;
+.emoji {
+  font-weight: 400;
+}
+
+.rainbow-char {
+  &:nth-of-type(6n + 1) {
+    color: $red;
+  }
+  &:nth-of-type(6n + 2) {
+    color: $orange;
+  }
+  &:nth-of-type(6n + 3) {
+    color: $yellow;
+  }
+  &:nth-of-type(6n + 4) {
+    color: $green;
+  }
+  &:nth-of-type(6n + 5) {
+    color: $blue;
+  }
+  &:nth-of-type(6n) {
+    color: $purple;
+  }
 }
 
 /*

@@ -9,6 +9,5 @@ const App = require("./components/app");
 const appMount = document.getElementById("shorts-app");
 const renderApp = () => ReactDOM.render(<App store={store} />, appMount);
 
-// Let's get this party started
 store.subscribe(renderApp);
 renderApp();
