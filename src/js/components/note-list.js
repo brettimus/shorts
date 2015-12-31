@@ -26,8 +26,8 @@ const NoteInput = () => ({
 
 const NoteUpdateButton = () => ({
     handleClick(event) {
-        event.stopPropagation;
-        event.preventDefault;
+        event.stopPropagation();
+        event.preventDefault();
 
         this.props.updateNote();
     },
