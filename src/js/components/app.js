@@ -5,13 +5,13 @@ const NoteForm = require("./note-form");
 
 const App = React.createClass({
 
-    componentDidMount() {
-        document.body.addEventListener("click", this.handleClick);
-    },
+    // componentDidMount() {
+    //     document.body.addEventListener("click", this.handleClick);
+    // },
 
-    componentWillUnmout() {
-        document.body.removeEventListener("click", this.handleClick);
-    },
+    // componentWillUnmout() {
+    //     document.body.removeEventListener("click", this.handleClick);
+    // },
 
     handleClick(event) {
         this.props.store.dispatch({
@@ -30,14 +30,14 @@ const App = React.createClass({
     render() {
         return (
             <div>
-                <p className="notes-lede">
+                <p className="notes-lede" onClick={this.handleClick}>
                     {"Shorts".split("").map(this.toRainbowChar)}
                     <span className="notes-sub">
-                        A delightful way to leave yourself little notes.
+                        A delightful little way to leave yourself short notes.
                     </span>
                 </p>
                 <NoteList store={this.props.store} />
-                <NoteForm store={this.props.store}/>
+                <NoteForm onClick={this.handleClick} store={this.props.store}/>
             </div>
         );
     },

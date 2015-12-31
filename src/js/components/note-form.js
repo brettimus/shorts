@@ -50,7 +50,7 @@ const NoteForm = React.createClass({
         let {store} = this.props;
         let state = store.getState();
         return (
-            <form onSubmit={this.handleSubmit} className="note-form note-form-fixed">
+            <form onClick={this.props.onClick} onSubmit={this.handleSubmit} className="note-form note-form-fixed">
                 <NoteInput 
                   handleChange={this.handleInputChange} 
                   value={state.newNoteInput} />
